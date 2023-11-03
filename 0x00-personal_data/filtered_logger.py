@@ -71,7 +71,9 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 
 def main():
-    """"""
+    """reads and filters data from `users` table and inserts it into
+    `filtered_data` table.
+    """
     conn = get_db()
     cur = conn.cursor()
     lg = get_logger()
