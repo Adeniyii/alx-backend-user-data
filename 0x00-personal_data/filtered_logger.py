@@ -7,7 +7,7 @@ import re
 import os
 from typing import List
 import logging
-import mysql.connector
+from mysql.connector import (connection)
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -56,7 +56,7 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> mysql.connector.connection.MySQLConnection:
+def get_db() -> connection.MySQLConnection:
     """returns a connector to the database."""
     user = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
     password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
@@ -64,7 +64,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     db_name = os.getenv("PERSONAL_DATA_DB_NAME")
 
     # return MsSQLConnection
-    return mysql.connector.connection.MySQLConnection(
+    return connection.MySQLConnection(
         user=user, password=password, host=host, database=db_name
     )
 
@@ -85,6 +85,8 @@ def main():
         msg = fmt.format(row[0], row[1], row[2], row[3], row[4], row[5],
                          row[6], row[7])
         lg.info(msg)
+    cur.close()
+    conn.close()
 
 
 if __name__ == "__main__":
