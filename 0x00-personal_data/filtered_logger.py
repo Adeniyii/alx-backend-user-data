@@ -49,6 +49,7 @@ def get_logger() -> logging.Logger:
     stream_handler.setFormatter(formatter)
     logger.addHandler(stream_handler)
     logger.setLevel(logging.INFO)
+    logger.propagate = False
     return logger
 
 
