@@ -4,8 +4,10 @@ which obfuscates specific fields from an input string."""
 
 
 import re
+import os
 from typing import List
 import logging
+import mysql.connector
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -51,6 +53,21 @@ def get_logger() -> logging.Logger:
     logger.setLevel(logging.INFO)
     logger.propagate = False
     return logger
+
+
+def get_db():
+    """returns a connector to the database."""
+    uname = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    pwd = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    db = os.getenv("PERSONAL_DATA_DB_NAME")
+
+    return mysql.connector.connect(
+        user=uname,
+        password=pwd,
+        host=host,
+        database=db
+    )
 
 
 if __name__ == "__main__":
