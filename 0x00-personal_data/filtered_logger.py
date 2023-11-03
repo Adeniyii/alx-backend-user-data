@@ -70,6 +70,8 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         port=3306
     )
 
+    assert isinstance(conn, mysql.connector.connection.MySQLConnection)
+
     return conn
 
 
