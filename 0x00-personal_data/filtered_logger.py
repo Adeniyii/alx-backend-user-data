@@ -26,7 +26,8 @@ class RedactingFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
         """filter values in incoming log records using filter_datum."""
         filtered_msg = filter_datum(
-            self.fields, self.REDACTION, record.getMessage(), self.SEPARATOR)
+            self.fields, self.REDACTION, record.getMessage(), self.SEPARATOR
+        )
         record.msg = filtered_msg
         return super().format(record)
 
@@ -63,22 +64,27 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     db = os.getenv("PERSONAL_DATA_DB_NAME", "")
 
     conn = mysql.connector.connect(
-        user=user,
-        password=pwd,
-        host=host,
-        database=db,
-        port=3306
+        user=user, password=pwd, host=host, database=db, port=3306
     )
-
-    assert isinstance(conn, mysql.connector.connection.MySQLConnection)
 
     return conn
 
 
+def main():
+    """"""
+    conn = get_db()
+    cur = conn.cursor()
+    lg = get_logger()
+
+    fmt = "name={}; email={}; phone={}; ssn={}; password={}; ip={};\
+     last_login={}; user_agent={};"
+
+    cur.execute("SELECT * FROM users;")
+    for row in cur:
+        msg = fmt.format(row[0], row[1], row[2], row[3], row[4], row[5],
+                         row[6], row[7])
+        lg.info(msg)
+
+
 if __name__ == "__main__":
-    message = "name=Bob;email=bob@dylan.com;ssn=000-123-0000;\
-    password=bobby2019;"
-    log_record = logging.LogRecord(
-        "my_logger", logging.INFO, None, None, message, None, None)
-    formatter = RedactingFormatter(fields=("email", "ssn", "password"))
-    print(formatter.format(log_record))
+    main()
