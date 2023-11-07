@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Basic auth module for the app
 """
-from typing import List
+from typing import List, TypeVar
 
 
 class BasicAuth():
@@ -16,3 +16,8 @@ class BasicAuth():
                 path += "/"
             return path not in excluded_paths
         return True
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """Returns the current User
+        """
+        return None
