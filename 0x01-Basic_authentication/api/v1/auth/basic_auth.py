@@ -52,4 +52,4 @@ class BasicAuth():
         except Exception:
             return None
         else:
-            return str(decoded)
+            return decoded.decode("utf-8")
