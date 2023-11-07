@@ -8,6 +8,9 @@ class BasicAuth():
     """Implements basic authentication
     """
 
+    def __init__(self):
+        pass
+
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Return False True if path requires authentication
         """
