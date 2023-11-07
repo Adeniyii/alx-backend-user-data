@@ -3,6 +3,9 @@
 """
 
 
+from typing import List, TypeVar
+
+
 class Auth:
     """Authentication class
     """
@@ -15,7 +18,7 @@ class Auth:
         if path and excluded_paths:
             if not path.endswith("/"):
                 path += "/"
-            return path in excluded_paths
+            return path not in excluded_paths
         return True
 
     def authorization_header(self, request=None) -> str:
