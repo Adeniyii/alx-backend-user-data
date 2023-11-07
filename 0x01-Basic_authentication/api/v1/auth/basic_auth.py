@@ -17,6 +17,13 @@ class BasicAuth():
             return path not in excluded_paths
         return True
 
+    def authorization_header(self, request=None) -> str:
+        """Returns the authorization headers
+        """
+        if request is not None:
+            return request.headers.get('Authorization', None)
+        return None
+
     def current_user(self, request=None) -> TypeVar('User'):
         """Returns the current User
         """
