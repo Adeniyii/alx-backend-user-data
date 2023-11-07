@@ -45,7 +45,6 @@ def middleware():
     """Middleware to run before every request
     """
     if auth is None:
-        print(auth)
         return None
     excluded_paths = ['/api/v1/status/',
                       '/api/v1/unauthorized/', '/api/v1/forbidden/']
