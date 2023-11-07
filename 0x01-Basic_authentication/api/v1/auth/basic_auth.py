@@ -8,9 +8,6 @@ class BasicAuth():
     """Implements basic authentication
     """
 
-    def __init__(self):
-        pass
-
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Return False True if path requires authentication
         """
@@ -31,3 +28,16 @@ class BasicAuth():
         """Returns the current User
         """
         return None
+
+    def extract_base64_authorization_header(
+            self, authorization_header: str) -> str:
+        """Return encoded authorization header value
+        """
+        if not authorization_header:
+            return None
+        if not isinstance(authorization_header, str):
+            return None
+        basic, hash, *_ = authorization_header.split(" ") + [" ", "meh"]
+        if basic != "Basic":
+            return None
+        return hash
