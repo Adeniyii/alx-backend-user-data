@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Basic auth module for the app
 """
-from typing import List, Optional, TypeVar
+from typing import List, Optional
 from flask import Request
 
 
@@ -25,8 +25,3 @@ class BasicAuth():
         if request is None:
             return None
         return request.headers.get("Authorization")
-
-    def current_user(self, request=None) -> TypeVar('User'):
-        """Returns the current User
-        """
-        return None
