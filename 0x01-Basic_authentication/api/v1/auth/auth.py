@@ -23,8 +23,7 @@ class Auth:
             return path not in excluded_paths
         return True
 
-    def authorization_header(
-            self, request: Optional[Request] = None) -> Optional[str]:
+    def authorization_header(self, request=None) -> str:
         """Returns the authorization headers
         """
         if request is None:

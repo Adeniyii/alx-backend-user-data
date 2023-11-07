@@ -41,7 +41,7 @@ def forbidden(error) -> str:
 
 
 @app.before_request
-def middleware():
+def middleware() -> None:
     """Middleware to run before every request
     """
     if auth is None:
