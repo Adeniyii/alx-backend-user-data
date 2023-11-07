@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """ Auth module for the API
 """
+from flask import Request
 
-from typing import List, TypeVar
+
+from typing import List, Optional, TypeVar
 
 
 class Auth:
@@ -20,6 +22,11 @@ class Auth:
                 path += "/"
             return path not in excluded_paths
         return True
+
+    def authorization_header(self, request=None) -> str:
+        """Returns the authorization headers
+        """
+        return ""
 
     def current_user(self, request=None) -> TypeVar('User'):
         """Returns the current User
