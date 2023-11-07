@@ -14,7 +14,8 @@ class Auth:
         pass
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """"""
+        """Return False True if path requires authentication
+        """
         if path and excluded_paths:
             if not path.endswith("/"):
                 path += "/"
@@ -22,9 +23,11 @@ class Auth:
         return True
 
     def authorization_header(self, request=None) -> str:
-        """"""
+        """Returns the authorization headers
+        """
         return None
 
     def current_user(self, request=None) -> TypeVar('User'):
-        """"""
+        """Returns the current User
+        """
         return None
