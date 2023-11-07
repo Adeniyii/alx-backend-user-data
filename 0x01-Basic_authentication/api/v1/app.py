@@ -3,10 +3,10 @@
 Route module for the API
 """
 from os import getenv
+from typing import List
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
-import os
 
 
 app = Flask(__name__)
@@ -44,18 +44,16 @@ def forbidden(error) -> str:
 def middleware() -> None:
     """Middleware to run before every request
     """
+    excluded_paths: List[str] = ['/api/v1/status/',
+                                 '/api/v1/unauthorized/', '/api/v1/forbidden/']
+
     if auth is None:
         return None
-    excluded_paths = ['/api/v1/status/',
-                      '/api/v1/unauthorized/', '/api/v1/forbidden/']
-    req_auth = auth.require_auth(request.path, excluded_paths)
-    if not req_auth:
+    if not auth.require_auth(request.path, excluded_paths):
         return None
-    has_auth_header = auth.authorization_header(request)
-    if not has_auth_header:
+    if not auth.authorization_header(request):
         return abort(401)
-    curr_user = auth.current_user(request)
-    if not curr_user:
+    if not auth.current_user(request):
         return abort(403)
     return None
 
