@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Basic auth module for the app
 """
+from base64 import b64decode
 from typing import List, TypeVar
 
 
@@ -33,11 +34,22 @@ class BasicAuth():
             self, authorization_header: str) -> str:
         """Return encoded authorization header value
         """
-        if not authorization_header:
-            return None
         if not isinstance(authorization_header, str):
             return None
         basic, hash, *_ = authorization_header.split(" ") + [" ", "meh"]
         if basic != "Basic":
             return None
         return hash
+
+    def decode_base64_authorization_header(
+            self, base64_authorization_header: str) -> str:
+        """Decode base64 encoded auth credentials
+        """
+        if not isinstance(base64_authorization_header, str):
+            return None
+        try:
+            decoded = b64decode(base64_authorization_header)
+        except Exception:
+            return None
+        else:
+            return str(decoded)
