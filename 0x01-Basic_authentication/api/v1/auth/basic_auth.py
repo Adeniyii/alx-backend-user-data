@@ -42,7 +42,7 @@ class BasicAuth(Auth):
         """
         if not isinstance(decoded_base64_authorization_header, str):
             return None, None
-        cred = decoded_base64_authorization_header.split(":")
+        cred = decoded_base64_authorization_header.split(":", 1)
         if len(cred) != 2:
             return None, None
         return cred[0], cred[1]
