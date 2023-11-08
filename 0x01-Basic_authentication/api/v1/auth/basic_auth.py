@@ -4,31 +4,13 @@
 from base64 import b64decode
 from typing import List, TypeVar
 
+from api.v1.auth.auth import Auth
+from models.user import User
 
-class BasicAuth():
+
+class BasicAuth(Auth):
     """Implements basic authentication
     """
-
-    def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """Return False True if path requires authentication
-        """
-        if path and excluded_paths:
-            if not path.endswith("/"):
-                path += "/"
-            return path not in excluded_paths
-        return True
-
-    def authorization_header(self, request=None) -> str:
-        """Returns the authorization headers
-        """
-        if request is not None:
-            return request.headers.get('Authorization', None)
-        return None
-
-    def current_user(self, request=None) -> TypeVar('User'):
-        """Returns the current User
-        """
-        return None
 
     def extract_base64_authorization_header(
             self, authorization_header: str) -> str:
@@ -64,3 +46,17 @@ class BasicAuth():
         if len(cred) != 2:
             return None, None
         return cred[0], cred[1]
+
+    def user_object_from_credentials(
+            self, user_email: str, user_pwd: str) -> TypeVar('User'):
+        """Returns a matching user.
+        """
+        if not isinstance(user_email, str) or not isinstance(user_pwd, str):
+            return None
+        user = User(email=user_email, password=user_pwd)
+        found = user.search({"email": user_email})
+        if len(found) < 1:
+            return None
+        if not found[0].is_valid_password(user_pwd):
+            return None
+        return found[0]
