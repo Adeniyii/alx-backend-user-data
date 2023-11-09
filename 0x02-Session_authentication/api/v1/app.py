@@ -53,13 +53,15 @@ def middleware() -> None:
     """Middleware to run before every request
     """
     excluded_paths: List[str] = ['/api/v1/status/',
+                                 "/api/v1/auth_session/login/",
                                  '/api/v1/unauthorized/', '/api/v1/forbidden/']
 
     if auth is None:
         return None
     if not auth.require_auth(request.path, excluded_paths):
         return None
-    if not auth.authorization_header(request):
+    if not auth.authorization_header(request)\
+            and not auth.session_cookie(request):
         return abort(401)
     u = auth.current_user(request)
     if not u:
