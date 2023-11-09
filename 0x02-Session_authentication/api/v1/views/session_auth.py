@@ -4,7 +4,7 @@
 from os import getenv
 from typing import List
 from api.v1.views import app_views
-from flask import jsonify, request
+from flask import abort, jsonify, request
 from models.user import User
 
 
@@ -33,3 +33,14 @@ def login():
     out = jsonify(res[0].to_json())
     out.set_cookie(getenv("SESSION_NAME"), sesh_id)
     return out
+
+
+@app_views.route(
+    "/auth_session/logout", methods=["DELETE"], strict_slashes=False)
+def logout():
+    """Logs a user out of the application
+    """
+    from api.v1.app import auth
+    if not auth.destroy_session(request):
+        abort(404)
+    return jsonify({}), 200
