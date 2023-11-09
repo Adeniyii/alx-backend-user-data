@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ Auth module for the API
 """
+import os
 from typing import List, TypeVar
 
 
@@ -33,3 +34,11 @@ class Auth:
         """Returns the current User
         """
         return None
+
+    def session_cookie(self, request=None):
+        """Get session from request.
+        """
+        if request is None:
+            return None
+        sesh_key = os.getenv("SESSION_NAME")
+        return request.cookies.get(sesh_key)
