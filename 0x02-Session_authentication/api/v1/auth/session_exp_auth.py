@@ -19,7 +19,7 @@ class SessionExpAuth(SessionAuth):
         session_id = super().create_session(user_id)
         if session_id is None:
             return None
-        self.user_id_by_session_id[session_id] = {
+        type(self).user_id_by_session_id[session_id] = {
             "user_id": user_id,
             "created_at": datetime.datetime.now()
         }
@@ -31,7 +31,7 @@ class SessionExpAuth(SessionAuth):
         if session_id is None:
             return None
 
-        seshObj = self.user_id_by_session_id.get(session_id)
+        seshObj = type(self).user_id_by_session_id.get(session_id)
         if seshObj is None:
             return None
 
