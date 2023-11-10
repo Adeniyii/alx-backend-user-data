@@ -35,6 +35,9 @@ class SessionExpAuth(SessionAuth):
         if seshObj is None:
             return None
 
+        if self.session_duration <= 0 or self.session_duration is None:
+            return seshObj.get("user_id")
+
         createdAt = seshObj.get("created_at")
         if createdAt is None:
             return None
