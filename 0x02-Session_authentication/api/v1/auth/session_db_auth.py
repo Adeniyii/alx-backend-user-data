@@ -26,15 +26,19 @@ class SessionDBAuth(SessionExpAuth):
 
         from models.user_session import UserSession
 
-        sesh_obj_list = UserSession.search({"session_id": session_id})
+        try:
+            sesh_obj_list = UserSession.search({"session_id": session_id})
+        except Exception:
+            return None
+
         if len(sesh_obj_list) == 0:
             return None
         seshObj = sesh_obj_list[0]
 
         if self.session_duration <= 0 or self.session_duration is None:
-            return seshObj.get("user_id")
+            return seshObj.user_id
 
-        createdAt = seshObj.get("created_at")
+        createdAt = seshObj.created_at
         if createdAt is None:
             return None
 
@@ -42,7 +46,7 @@ class SessionDBAuth(SessionExpAuth):
         if exp < datetime.datetime.now():
             return None
 
-        return seshObj.get("user_id")
+        return seshObj.user_id
 
     def destroy_session(self, request=None):
         """Delete the user session / log out.
@@ -56,7 +60,11 @@ class SessionDBAuth(SessionExpAuth):
 
         from models.user_session import UserSession
 
-        sesh_obj_list = UserSession.search({"session_id": sesh_id})
+        try:
+            sesh_obj_list = UserSession.search({"session_id": sesh_id})
+        except Exception:
+            return False
+
         if len(sesh_obj_list) == 0:
             return False
 

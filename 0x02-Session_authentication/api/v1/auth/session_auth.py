@@ -23,6 +23,7 @@ class SessionAuth(Auth):
     def user_id_for_session_id(self, session_id: str = None) -> str:
         """Reetrive user connected to a given session
         """
+        print("hereeeeee")
         if not isinstance(session_id, str):
             return None
         return type(self).user_id_by_session_id.get(session_id)
