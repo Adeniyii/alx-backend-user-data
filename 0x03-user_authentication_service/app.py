@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Module `app.py` sets up a Flask application.
 """
-from flask import Flask, jsonify, request
+from flask import Flask, abort, jsonify, request
 from auth import Auth
 
 
@@ -37,6 +37,30 @@ def users() -> str:
         return jsonify({"message": "email already registered"}), 400
 
     return jsonify({"email": email, "message": "user created"}), 200
+
+
+@app.route("/sessions", methods=["POST"], strict_slashes=False)
+def login() -> str:
+    """ POST /sessions
+    Form data:
+      - email
+      - password
+    Return:
+      - 200 if logged in successfully
+      - 401 if login credentials are invalid
+    """
+    email = request.form.get("email")
+    password = request.form.get("password")
+    is_valid_login = AUTH.valid_login(email, password)
+
+    if not is_valid_login:
+        abort(401)
+
+    sesh = AUTH.create_session(email)
+    res = jsonify({"email": email, "message": "logged in"}), 200
+    res.set_cookie("session_id", sesh)
+
+    return res
 
 
 if __name__ == "__main__":
