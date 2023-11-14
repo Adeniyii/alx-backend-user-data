@@ -12,7 +12,7 @@ def home() -> str:
     Return:
       - a simple json message
     """
-    return jsonify({"message": "Wagwan monsieur"})
+    return jsonify({"message": "Bienvenue"})
 
 
 if __name__ == "__main__":
