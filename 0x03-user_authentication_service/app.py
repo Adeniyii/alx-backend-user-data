@@ -40,13 +40,13 @@ def users() -> str:
 
 
 @app.route("/sessions", methods=["POST"], strict_slashes=False)
-def login():
+def login() -> str:
     """ POST /sessions
     Form data:
       - email
       - password
     Return:
-      - 200 if logged in successfully
+      - The account login payload
       - 401 if login credentials are invalid
     """
     email = request.form.get("email")
@@ -57,7 +57,7 @@ def login():
         abort(401)
 
     sesh = AUTH.create_session(email)
-    res = jsonify({"email": email, "message": "logged in"}), 200
+    res = jsonify({"email": email, "message": "logged in"})
     res.set_cookie("session_id", sesh)
 
     return res
