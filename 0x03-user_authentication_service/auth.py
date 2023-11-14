@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Auth module defines authentication utilities.
 """
+from typing import Optional
 import uuid
 import bcrypt
 from sqlalchemy.orm.exc import NoResultFound
@@ -36,6 +37,18 @@ class Auth:
 
         return bcrypt.checkpw(
             password.encode("utf-8"), user.hashed_password.encode("utf-8"))
+
+    def create_session(self, email: str) -> Optional[str]:
+        """Create a session for the user
+        """
+        try:
+            user = self._db.find_user_by(email=email)
+            sesh_id = _generate_uuid()
+            self._db.update_user(user.id, session_id=sesh_id)
+        except NoResultFound:
+            return None
+
+        return sesh_id
 
 
 def _hash_password(password: str) -> bytes:
