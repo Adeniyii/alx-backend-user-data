@@ -19,7 +19,7 @@ def home() -> str:
 
 
 @app.route("/users", methods=["POST"], strict_slashes=False)
-def users():
+def users() -> str:
     """ POST /users
     Form data:
       - email
@@ -32,7 +32,7 @@ def users():
     password = request.form.get("password")
 
     try:
-        Auth.register_user(email=email, password=password)
+        AUTH.register_user(email=email, password=password)
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
 
