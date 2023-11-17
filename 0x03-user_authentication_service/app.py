@@ -108,7 +108,10 @@ def get_reset_password_token():
       - The reset token payload
       - 403 if email is invalid
     """
-    email = request.form.get("email", "")
+    email = request.form.get("email")
+    if email is None:
+        abort(403)
+
     try:
         token = AUTH.get_reset_password_token(email)
     except ValueError:
