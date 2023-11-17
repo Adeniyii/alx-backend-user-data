@@ -75,12 +75,12 @@ def logout():
     Redirect:
       - GET /
     """
-    sesh_id = request.cookies.get(SESH_ID)
+    sesh_id = request.cookies.get(SESH_ID, "")
     user = AUTH.get_user_from_session_id(sesh_id)
     if user is None:
         abort(403)
     AUTH.destroy_session(user.id)
-    redirect("/")
+    return redirect("/")
 
 
 if __name__ == "__main__":
