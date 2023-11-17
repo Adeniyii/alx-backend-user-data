@@ -99,8 +99,8 @@ def profile():
     return jsonify({"email": user.email})
 
 
-@app.route("/reset_password", method=["POST"], strict_slashes=False)
-def get_reset_password_token():
+@app.route("/reset_password", methods=["POST"], strict_slashes=False)
+def get_reset_password_token() -> str:
     """ POST /reset_password
     Form data:
       - email
@@ -108,9 +108,7 @@ def get_reset_password_token():
       - The reset token payload
       - 403 if email is invalid
     """
-    email = request.form.get("email")
-    if email is None:
-        abort(403)
+    email = request.form.get("email", "")
 
     try:
         token = AUTH.get_reset_password_token(email)
