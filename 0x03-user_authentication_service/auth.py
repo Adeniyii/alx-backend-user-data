@@ -50,7 +50,7 @@ class Auth:
 
         return sesh_id
 
-    def get_user_from_session_id(self, session_id):
+    def get_user_from_session_id(self, session_id: str) -> Optional[User]:
         """Get user by session_id
         """
         try:
@@ -59,6 +59,12 @@ class Auth:
             return None
 
         return user
+
+    def destroy_session(self, user_id: int) -> None:
+        """Sets a user's session_id to None
+        """
+        self._db.update_user(user_id, session_id=None)
+        return None
 
 
 def _hash_password(password: str) -> bytes:
