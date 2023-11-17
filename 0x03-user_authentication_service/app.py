@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Module `app.py` sets up a Flask application.
 """
-from flask import Flask, abort, jsonify, request
+from flask import Flask, abort, jsonify, redirect, request
 from auth import Auth
 
 
 AUTH = Auth()
 app = Flask(__name__)
+
+SESH_ID = "session_id"
 
 
 @app.route("/", methods=["GET"], strict_slashes=False)
@@ -58,9 +60,27 @@ def login() -> str:
 
     sesh = AUTH.create_session(email)
     res = jsonify({"email": email, "message": "logged in"})
-    res.set_cookie("session_id", sesh)
+    res.set_cookie(SESH_ID, sesh)
 
     return res
+
+
+@app.route("/sessions", methods=["DELETE"], strict_slashes=False)
+def logout():
+    """ DELETE /sessions
+    Cookie data:
+      - session_id
+    Return:
+      - 403 if session_id matches no user
+    Redirect:
+      - GET /
+    """
+    sesh_id = request.cookies.get(SESH_ID)
+    user = AUTH.get_user_from_session_id(sesh_id)
+    if user is None:
+        abort(403)
+    AUTH.destroy_session(user.id)
+    redirect("/")
 
 
 if __name__ == "__main__":
