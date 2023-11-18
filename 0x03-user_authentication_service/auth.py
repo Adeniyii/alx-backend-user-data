@@ -88,7 +88,7 @@ class Auth:
 
         hash_pw = _hash_password(password)
         self._db.update_user(
-            user.id, hashed_password=hash_pw, reset_token=None)
+            user.id, hashed_password=hash_pw.decode("utf-8"), reset_token=None)
         return None
 
 
